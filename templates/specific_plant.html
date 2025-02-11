@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}"/>
+  <title>{{ plant_name }} Info</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+
+  <h1>Information Page for {{ plant_name }}</h1>
+
+  <a href="https://www.nukepowers.com/">
+    <button>Main Page</button>
+  </a>
+
+  <div style="float:none; height:20px;"></div>
+
+  <p>Plant: {{ plant_name }}</p>
+  <p>Power: {{ power }}</p>
+  <p>Five Day Stability: {{ stability }}</p>
+
+  <div style="float:none; height:30px;"></div>
+
+    <h2>Percent Capacity</h2>
+    <p>Over last three years</p>
+    <p>Percent Capacity: {{ perc_capacity }} %</p>
+
+
+
+    <div style="float:none; height:30px;"></div>
+
+    <h2>Outage Estimates</h2>
+
+    <p>End of last outage: {{ outage_date }}</p>
+    <p>Guess of future outage: {{ next_outage_date }}</p>
+    <div style="float:none; height:5px;"></div>
+    <p>Note: Outage is determined by 10 or more consecutive days at 0% power. This could lead to the program picking up on non-refueling outages.</p>
+
+
+  <div style="float:none; height:30px;"></div>
+
+
+  <h2>Database Info</h2>
+
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Plant Name</th>
+      <th>Design</th>
+      <th>Containment</th>
+      <th>Design Company</th>
+      <th>NRC Region</th>
+      <th>Utility</th>
+      <th>Refuel Cycle (Months)</th>
+      <th>State</th>
+      <th>Cooling Source</th>
+      <th>Commission Year</th>
+      <th>Commission Decade</th>
+      <th>Decommission Year</th>
+      <th>GEN</th>
+      <th>Capacity (MWe)</th>
+    </tr>
+    <tbody id="plants">
+  {% for row in table_results %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td>{{ row[1] }}</td>
+      <td>{{ row[2] }}</td>
+      <td>{{ row[3] }}</td>
+      <td>{{ row[4] }}</td>
+      <td>{{ row[5] }}</td>
+      <td>{{ row[6] }}</td>
+      <td>{{ row[7] }}</td>
+      <td>{{ row[8] }}</td>
+      <td>{{ row[9] }}</td>
+      <td>{{ row[10] }}</td>
+      <td>{{ row[11] }}</td>
+      <td>{{ row[12] }}</td>
+      <td>{{ row[13] }}</td>
+      <td>{{ row[14] }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    <div style="float:none; height:30px;"></div>
+
+    <h2>Plots</h2>
+    <p>If custom plots are desired, those can be created on the main page</p>
+    {% if plot_url2 %}
+        <img src={{ plot_url1 }} alt="Something went wrong, chart cannot be displayed">
+    {% endif %}
+
+    {% if plot_url2 %}
+        <img src={{ plot_url2 }} alt="Something went wrong, chart cannot be displayed">
+    {% endif %}
+
+    {% if plot_url3 %}
+        <img src={{ plot_url3 }} alt="Something went wrong, chart cannot be displayed">
+    {% endif %}
+
+    <div style="float:none; height:30px;"></div>
+
+
+
+</body>
+</html>

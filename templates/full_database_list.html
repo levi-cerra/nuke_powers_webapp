@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!--Table searched came from this website: https://www.geeksforgeeks.org/how-to-perform-a-real-time-search-and-filter-on-a-html-table/-->
+  <script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}"/>
+  <title>Full Database</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+
+  <h2>US Plant Table</h2>
+
+  <a href="https://www.nukepowers.com/">
+    <button>Main Page</button>
+  </a>
+
+  <p>Search the table for any field here:
+        <input id="gfg" type="text" placeholder="Search here">
+  </p>
+
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Plant Name</th>
+      <th>Design</th>
+      <th>Containment</th>
+      <th>Design Company</th>
+      <th>NRC Region</th>
+      <th>Utility</th>
+      <th>Refuel Cycle (Months)</th>
+      <th>State</th>
+      <th>Cooling Source</th>
+      <th>Commission Year</th>
+      <th>Commission Decade</th>
+      <th>Decommission Year</th>
+      <th>GEN</th>
+      <th>Capacity (MWe)</th>
+    </tr>
+    <tbody id="plants">
+    {% for row in table_results %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td>{{ row[1] }}</td>
+      <td>{{ row[2] }}</td>
+      <td>{{ row[3] }}</td>
+      <td>{{ row[4] }}</td>
+      <td>{{ row[5] }}</td>
+      <td>{{ row[6] }}</td>
+      <td>{{ row[7] }}</td>
+      <td>{{ row[8] }}</td>
+      <td>{{ row[9] }}</td>
+      <td>{{ row[10] }}</td>
+      <td>{{ row[11] }}</td>
+      <td>{{ row[12] }}</td>
+      <td>{{ row[13] }}</td>
+      <td>{{ row[14] }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="float:none; height:20px;"></div>
+
+<script>
+        $(document).ready(function () {
+            $("#gfg").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#plants tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+</script>
+
+
+</body>
+</html>
+

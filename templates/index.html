@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!--Table searched came from this website: https://www.geeksforgeeks.org/how-to-perform-a-real-time-search-and-filter-on-a-html-table/-->
+  <script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}"/>
+  <title>Nuclear Plant Database</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <h1>US Nuclear Plant Database</h1>
+  <p>Most recent NRC data from: {{ todays_date }} (NRC does not update power data on weekends or holidays)</p>
+  <p>Below is a plotting tool and tables with information on all currently operating US nuclear plants. Click on any plant to see more specific information, its power status, and several power history plots.</p>
+
+  <div style="float:none; height:5px;"></div>
+
+  <hr>
+
+  <h2>Plot Power Tool</h2>
+  <p>Enter the name of the plant you want to see the power history of, the start date, and the end date (Power history available from {{ first_available_date }} to {{ todays_date }}). Then click "PLOT".</p>
+
+
+  <form id="myForm" action="/get_plot" method='POST'>
+    <label for="plant_name_plot">Plant Name: </label>
+    <input type="text" id="plant_name_plot" name="plant_name_plot" required/>
+    <br><br>
+    <label for="start_date_plot">Start Date: </label>
+    <input type="text" id="start_date_plot" name="start_date_plot" required/>
+    <br><br>
+    <label for="end_date_plot">End Date: </label>
+    <input type="text" id="end_date_plot" name="end_date_plot" required/>
+    <br><br>
+    <input type="submit" value="PLOT" />
+    <input type="button" onclick="reset()" value="RESET">
+  </form>
+
+  <div style="float:none; height:15px;"></div>
+
+  <p>Notes:</p>
+  <p>   1. Incorrect spelling of plant name will cause an error, but case does not matter</p>
+  <p>   2. Dates must be in the format "MM/DD/YYYY"</p>
+
+  <hr>
+
+  <script>
+      function reset(){
+          document.getElementById("myForm").reset();
+      }
+  </script>
+
+
+  <h2>US Plant Table</h2>
+
+  <a href="https://www.nukepowers.com/plant_database">
+    <button>Full Database</button>
+  </a>
+
+
+  <p>Search the table for any field here:
+        <input id="gfg" type="text" placeholder="Search here">
+  </p>
+
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Plant Name</th>
+      <th>Power</th>
+      <th>Stability</th>
+      <th>Design</th>
+      <th>Design Company</th>
+      <th>NRC Region</th>
+    </tr>
+    <tbody id="plants">
+    {% for row in results1 %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td><a href="/specific_plant?name={{ row[1] }}&power={{ row[2] }}&stab={{ row[3] }}">{{ row[1] }}</a></td>
+      {% if row[2]==0 %}
+      <td bgcolor="#FFCCCB">{{ row[2] }}</td>
+      {% elif row[2] < 100 %}
+      <td bgcolor="#FFFF00">{{ row[2] }}</td>
+      {% else %}
+      <td bgcolor="#90EE90">{{ row[2] }}</td>
+      {% endif %}
+      {% if row[3]=='Increasing' %}
+      <td style="color:#025839;font-weight:bold">{{ row[3] }}</td>
+      {% elif row[3]=='Decreasing' %}
+      <td style="color:#8B0000;font-weight:bold">{{ row[3] }}</td>
+      {% else %}
+      <td>{{ row[3] }}</td>
+      {% endif %}
+      <td>{{ row[4] }}</td>
+      <td>{{ row[5] }}</td>
+      <td>{{ row[6] }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="float:none; height:20px;"></div>
+
+<script>
+        $(document).ready(function () {
+            $("#gfg").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#plants tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+</script>
+
+
+</body>
+</html>
+
