@@ -15,7 +15,12 @@
 </head>
 <body>
   <h1>US Nuclear Plant Database</h1>
-  <p>Most recent NRC data from: {{ todays_date }} (NRC does not update power data on weekends or holidays)</p>
+  <p>Most recent NRC data from: <strong>{{ todays_date }}</strong> (NRC does not update power data on weekends or holidays)</p>
+
+  <p>With today's power percentages, nuclear power is currently producing <strong>~{{ sum_of_power_produced }} Gigawatts</strong> of energy for the US. This conservatively equates to the power demand of <strong>~{{ homes_powered }} million homes!</strong></p>
+
+  <div style="float:none; height:5px;"></div>
+
   <p>Below is a plotting tool and tables with information on all currently operating US nuclear plants. Click on any plant to see more specific information, its power status, and several power history plots.</p>
 
   <div style="float:none; height:5px;"></div>
@@ -23,7 +28,7 @@
   <hr>
 
   <h2>Plot Power Tool</h2>
-  <p>Enter the name of the plant you want to see the power history of, the start date, and the end date (Power history available from {{ first_available_date }} to {{ todays_date }}). Then click "PLOT".</p>
+  <p>Enter the name of the plant you want to see the power history of, the start date, and the end date (Power history available from <strong>{{ first_available_date }}</strong> to <strong>{{ todays_date }}</strong>). Then click "PLOT".</p>
 
 
   <form id="myForm" action="/get_plot" method='POST'>
@@ -45,6 +50,8 @@
   <p>Notes:</p>
   <p>   1. Incorrect spelling of plant name will cause an error, but case does not matter</p>
   <p>   2. Dates must be in the format "MM/DD/YYYY"</p>
+
+  <div style="float:none; height:5px;"></div>
 
   <hr>
 

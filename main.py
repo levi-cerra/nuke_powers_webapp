@@ -38,6 +38,27 @@ try:
     conn.commit()
     first_available_date = datetime.strptime(first_available_date[0][0], '%m/%d/%Y')
     first_available_date = first_available_date.strftime("%m/%d/%Y")
+
+    query = "SELECT all_rated_power FROM plant_info_all WHERE all_plants_ID<95;"
+    mycursor = conn.cursor()
+    mycursor.execute(query)
+    rated_power_data = mycursor.fetchall()
+    conn.commit()
+
+    # Get the information on how much power is currently being made by nuclear energy
+    powers = []
+    percents = []
+    power_produced = []
+    for i, row in enumerate(results1):
+        powers.append(rated_power_data[i][0])
+        for j, value in enumerate(row):
+            if j == 2:
+                percents.append(value)
+                power_produced.append((float(value)/100) * float(rated_power_data[i][0]))
+
+    sum_of_power_produced = np.round(np.sum(power_produced) / 1000, 2) # puts it into terawatts and leaves 2 decimal places
+    homes_powered = np.round(sum_of_power_produced * 1000 * 500 / 1000000, 0)
+
 except mysql.connector.Error as e:
     results1 = ["#"]
     message = 'NOT CONNECTED'
@@ -46,7 +67,7 @@ except mysql.connector.Error as e:
 
 @app.route('/')
 def index():
-    return render_template('index.html', results1 = results1, todays_date = todays_date, first_available_date = first_available_date)
+    return render_template('index.html', results1 = results1, todays_date = todays_date, first_available_date = first_available_date, sum_of_power_produced = sum_of_power_produced, homes_powered = homes_powered)
 
 
 @app.route('/get_plot', methods = ['GET', 'POST'])
