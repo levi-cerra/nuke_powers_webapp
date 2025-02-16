@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from secrets import secrets
-from utils import get_plant_hashmap, get_upper_plant_hashmap
+from utils import get_plant_hashmap, get_upper_plant_hashmap, website_plots
 
 app = Flask(__name__)
 
@@ -110,16 +110,9 @@ def get_plot():
 
         x_axis = datelist
         y_axis = power_list
-        plt.plot( x_axis, y_axis, '-' )
-        plt.title(plant_name + " Power Plot")
-        plt.gcf().autofmt_xdate(rotation=25)
-        plt.grid()
-        plt.xlabel("Dates")
-        plt.ylabel("Power (%)")
-        plt.ylim(0, 110)
-        plt.xlim(datelist[0], datelist[len(datelist)-1])
-        plt.savefig('/home/ultrallama7/flask/static/plot.png')
-        plt.clf()
+        title = plant_name + " Power Plot"
+        save_location = '/home/ultrallama7/flask/static/plot.png'
+        website_plots(x_axis, y_axis, title, save_location)
 
         start_date = start_date_plot.strftime("%m/%d/%Y")
         end_date = end_date_plot.strftime("%m/%d/%Y")
@@ -182,44 +175,30 @@ def specific_plant():
                 else:
                     power_list.append(int(value))
 
+        # Create the plots
         x_axis = datelist[0:60]
+        x_axis.reverse()
         y_axis = power_list[0:60]
-        plt.plot( x_axis, y_axis, '-' )
-        plt.title(plant_name + " Power: Last Two Months of Data")
-        plt.gcf().autofmt_xdate(rotation=25)
-        plt.grid()
-        plt.xlabel("Dates")
-        plt.ylabel("Power (%)")
-        plt.ylim(0, 110)
-        plt.xlim(datelist[59], datelist[0])
-        plt.savefig('/home/ultrallama7/flask/static/two_month.png')
-        plt.clf()
+        y_axis.reverse()
+        title = plant_name + " Power: Last Two Months of Data"
+        save_location = '/home/ultrallama7/flask/static/two_month.png'
+        website_plots(x_axis, y_axis, title, save_location)
 
         x_axis = datelist[0:365]
+        x_axis.reverse()
         y_axis = power_list[0:365]
-        plt.plot( x_axis, y_axis, '-' )
-        plt.title(plant_name + " Power: Last Year of Data")
-        plt.gcf().autofmt_xdate(rotation=25)
-        plt.grid()
-        plt.xlabel("Dates")
-        plt.ylabel("Power (%)")
-        plt.ylim(0, 110)
-        plt.xlim(datelist[364], datelist[0])
-        plt.savefig('/home/ultrallama7/flask/static/one_year.png')
-        plt.clf()
+        y_axis.reverse()
+        title = plant_name + " Power: Last Year of Data"
+        save_location = '/home/ultrallama7/flask/static/one_year.png'
+        website_plots(x_axis, y_axis, title, save_location)
 
         x_axis = datelist[0:730]
+        x_axis.reverse()
         y_axis = power_list[0:730]
-        plt.plot( x_axis, y_axis, '-' )
-        plt.title(plant_name + " Power: Last Two Years of Data")
-        plt.gcf().autofmt_xdate(rotation=25)
-        plt.grid()
-        plt.xlabel("Dates")
-        plt.ylabel("Power (%)")
-        plt.ylim(0, 110)
-        plt.xlim(datelist[729], datelist[0])
-        plt.savefig('/home/ultrallama7/flask/static/two_year.png')
-        plt.clf()
+        y_axis.reverse()
+        title = plant_name + " Power: Last Two Years of Data"
+        save_location = '/home/ultrallama7/flask/static/two_year.png'
+        website_plots(x_axis, y_axis, title, save_location)
 
         # % Capacity
         perc_capacity = np.mean(power_list)

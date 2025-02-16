@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 # Return the plant hashmap for use in main.py and get_NRC_data.py
 def get_plant_hashmap():
     plant_hashmap = {
@@ -118,5 +120,18 @@ def get_reverse_plant_hashmap():
     reverse_plant_hashmap = dict((v, k) for k, v in plant_hashmap.items())
     return reverse_plant_hashmap
 
+
+def website_plots(x_axis, y_axis, title, save_location):
+    plt.plot( x_axis, y_axis, '-' )
+    plt.title(title)
+    plt.gcf().autofmt_xdate(rotation=25)
+    plt.grid()
+    plt.xlabel("Dates")
+    plt.ylabel("Power (%)")
+    plt.ylim(0, 110)
+    plt.xlim(x_axis[0], x_axis[len(x_axis)-1])
+    plt.savefig(save_location)
+    plt.clf()
+    return
 
 
