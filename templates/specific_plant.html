@@ -18,15 +18,15 @@
 
   <div style="float:none; height:20px;"></div>
 
-  <p>Plant: {{ plant_name }}</p>
-  <p>Power: {{ power }}</p>
-  <p>Five Day Stability: {{ stability }}</p>
+  <p>Plant: <strong>{{ plant_name }}</strong></p>
+  <p>Power: <strong>{{ power }} %</strong></p>
+  <p>Five Day Stability: <strong>{{ stability }}</strong></p>
 
   <div style="float:none; height:30px;"></div>
 
     <h2>Percent Capacity</h2>
     <p>Over last three years</p>
-    <p>Percent Capacity: {{ perc_capacity }} %</p>
+    <p>Percent Capacity: <strong>{{ perc_capacity }} %</strong></p>
 
 
 
@@ -34,8 +34,8 @@
 
     <h2>Outage Estimates</h2>
 
-    <p>End of last outage: {{ outage_date }}</p>
-    <p>Guess of future outage: {{ next_outage_date }}</p>
+    <p>End of last outage: <strong>{{ outage_date }}</strong></p>
+    <p>Guess of future outage: <strong>{{ next_outage_date }}</strong></p>
     <div style="float:none; height:5px;"></div>
     <p>Note: Outage is determined by 10 or more consecutive days at 0% power. This could lead to the program picking up on non-refueling outages.</p>
 
