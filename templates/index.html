@@ -9,7 +9,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}"/>
   <title>Nuclear Plant Database</title>
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
@@ -69,7 +69,6 @@
     <button>Full Database</button>
   </a>
 
-
   <p>Search the table for any field here:
         <input id="gfg" type="text" placeholder="Search here">
   </p>
@@ -110,6 +109,10 @@
     {% endfor %}
     </tbody>
   </table>
+
+  {% if US_map_url %}
+        <img src={{ US_map_url }} alt="Something went wrong, chart cannot be displayed">
+  {% endif %}
 
   <div style="float:none; height:20px;"></div>
 

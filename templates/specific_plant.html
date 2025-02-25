@@ -24,6 +24,7 @@
 
   <div style="float:none; height:30px;"></div>
 
+
     <h2>Percent Capacity</h2>
     <p>Over last three years</p>
     <p>Percent Capacity: <strong>{{ perc_capacity }} %</strong></p>
@@ -85,7 +86,11 @@
     {% endfor %}
     </table>
 
-    <div style="float:none; height:30px;"></div>
+    {% if map_url %}
+        <img src={{ map_url }} alt="Something went wrong, chart cannot be displayed">
+    {% endif %}
+
+    <div style="float:none; height:10px;"></div>
 
     <h2>Plots</h2>
     <p>If custom plots are desired, those can be created on the main page</p>

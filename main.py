@@ -59,6 +59,9 @@ try:
     sum_of_power_produced = np.round(np.sum(power_produced) / 1000, 2) # puts it into terawatts and leaves 2 decimal places
     homes_powered = np.round(sum_of_power_produced * 1000 * 500 / 1000000, 0)
 
+    # US Picture with plants marked
+    US_map_url = '/static/all_plants.png'
+
 except mysql.connector.Error as e:
     results1 = ["#"]
     message = 'NOT CONNECTED'
@@ -67,7 +70,7 @@ except mysql.connector.Error as e:
 
 @app.route('/')
 def index():
-    return render_template('index.html', results1 = results1, todays_date = todays_date, first_available_date = first_available_date, sum_of_power_produced = sum_of_power_produced, homes_powered = homes_powered)
+    return render_template('index.html', results1 = results1, todays_date = todays_date, first_available_date = first_available_date, sum_of_power_produced = sum_of_power_produced, homes_powered = homes_powered, US_map_url = US_map_url)
 
 
 @app.route('/get_plot', methods = ['GET', 'POST'])
@@ -214,7 +217,12 @@ def specific_plant():
                 next_outage_date = temp_date_2.strftime("%m/%d/%Y")
                 break
 
-        return render_template('specific_plant.html', plant_name = plant_name, power = power, stability = stability, table_results = table_results, perc_capacity = perc_capacity, outage_date = outage_date, next_outage_date = next_outage_date, plot_url1="/static/two_month.png", plot_url2="/static/one_year.png", plot_url3="/static/two_year.png")
+        # Plant Map
+        plant_map_file = "plant_" + str(plant_number) + "_map.png"
+        map_url = "/static/maps/" + plant_map_file
+
+
+        return render_template('specific_plant.html', plant_name = plant_name, power = power, stability = stability, table_results = table_results, perc_capacity = perc_capacity, outage_date = outage_date, next_outage_date = next_outage_date, plot_url1="/static/two_month.png", plot_url2="/static/one_year.png", plot_url3="/static/two_year.png", map_url = map_url)
     else:
         return render_template('specific_plant.html')
 
