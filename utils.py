@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 
 # Return the plant hashmap for use in main.py and get_NRC_data.py
 def get_plant_hashmap():
@@ -121,7 +123,8 @@ def get_reverse_plant_hashmap():
     return reverse_plant_hashmap
 
 
-def website_plots(x_axis, y_axis, title, save_location):
+# Function used to create power plots in the application
+def website_plots(x_axis, y_axis, title):
     plt.plot( x_axis, y_axis, '-' )
     plt.title(title)
     plt.gcf().autofmt_xdate(rotation=25)
@@ -130,8 +133,12 @@ def website_plots(x_axis, y_axis, title, save_location):
     plt.ylabel("Power (%)")
     plt.ylim(0, 110)
     plt.xlim(x_axis[0], x_axis[len(x_axis)-1])
-    plt.savefig(save_location)
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    figdata_png = base64.b64encode(figfile.getvalue())
+    result = str(figdata_png)[2:-1]
     plt.clf()
-    return
+    return result
 
 

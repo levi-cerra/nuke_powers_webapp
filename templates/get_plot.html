@@ -24,9 +24,29 @@
   <p>End Date: <strong>{{ end_date }}</strong></p>
 
 
-  {% if plot_url %}
-    <img src={{ plot_url }} alt="Something went wrong, chart cannot be displayed">
+  {% if plot_png %}
+    <img src="data:image/png;base64,{{ plot_png }}" alt="Something went wrong, chart cannot be displayed">
   {% endif %}
+
+  <div style="float:none; height:10px;"></div>
+
+  <h3>Raw Data</h3>
+  <p>You can highlight the data and copy the values to an Excel spreadsheet or Google Doc for personal use</p>
+
+  <table>
+    <tr>
+      <th>Date</th>
+      <th>Power</th>
+    </tr>
+    <tbody id="data">
+    {% for row in data %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td>{{ row[1] }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 
   <div style="float:none; height:30px;"></div>
 

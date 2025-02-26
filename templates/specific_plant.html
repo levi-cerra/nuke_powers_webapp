@@ -94,16 +94,16 @@
 
     <h2>Plots</h2>
     <p>If custom plots are desired, those can be created on the main page</p>
-    {% if plot_url2 %}
-        <img src={{ plot_url1 }} alt="Something went wrong, chart cannot be displayed">
+    {% if plot_1 %}
+        <img src="data:image/png;base64,{{ plot_1 }}" alt="Something went wrong, chart cannot be displayed">
     {% endif %}
 
-    {% if plot_url2 %}
-        <img src={{ plot_url2 }} alt="Something went wrong, chart cannot be displayed">
+    {% if plot_2 %}
+        <img src="data:image/png;base64,{{ plot_2 }}" alt="Something went wrong, chart cannot be displayed">
     {% endif %}
 
-    {% if plot_url3 %}
-        <img src={{ plot_url3 }} alt="Something went wrong, chart cannot be displayed">
+    {% if plot_3 %}
+        <img src="data:image/png;base64,{{ plot_3 }}" alt="Something went wrong, chart cannot be displayed">
     {% endif %}
 
     <div style="float:none; height:30px;"></div>
