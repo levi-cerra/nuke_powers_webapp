@@ -16,6 +16,11 @@
 </head>
 <body>
   <h1>US Nuclear Plant Database</h1>
+
+  <a href="https://www.nukepowers.com/info">
+    <button>Info Page</button>
+  </a>
+
   <p>Most recent NRC data from: <strong>{{ todays_date }}</strong> (NRC does not update power data on weekends or holidays)</p>
 
   <p>With today's power percentages, nuclear power is currently producing <strong>~{{ sum_of_power_produced }} Gigawatts</strong> of energy for the US. This conservatively equates to the power demand of <strong>~{{ homes_powered }} million homes</strong>!</p>
@@ -28,7 +33,7 @@
 
   <hr>
 
-  <h2>Plot Power Tool</h2>
+  <h2>Power Plot Tool</h2>
   <p>Enter the name of the plant you want to see the power history of, the start date, and the end date (Power history available from <strong>{{ first_available_date }}</strong> to <strong>{{ todays_date }}</strong>). Then click "PLOT".</p>
 
 

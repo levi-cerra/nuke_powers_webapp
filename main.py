@@ -72,6 +72,11 @@ def index():
     return render_template('index.html', results1 = results1, todays_date = todays_date, first_available_date = first_available_date, sum_of_power_produced = sum_of_power_produced, homes_powered = homes_powered, US_map_url = US_map_url)
 
 
+@app.route('/info')
+def info():
+    return render_template('info.html')
+
+
 @app.route('/get_plot', methods = ['GET', 'POST'])
 def get_plot():
     if request.method == "POST":

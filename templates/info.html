@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel = "stylesheet" href = "{{ url_for('static', filename = 'styles.css') }}"/>
+  <title>Info Page</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+
+  <h1>Information Page</h1>
+
+  <a href="https://www.nukepowers.com/">
+    <button>Main Page</button>
+  </a>
+
+  <p>This website was created to make it easy to access power data and information for all US nuclear power plants. Whether you're a nuclear professional or just interested in the US operating fleet, I hope you find this website useful!</p>
+  <p>All power data is pulled from the NRC power reactor status webpage:</p>
+  <a href="https://www.nrc.gov/reading-rm/doc-collections/event-status/reactor-status/index.html">NRC Power Reactor Status Webpage</a>
+  <div style="float:none; height:10px;"></div>
+  <p>All other information is calculated from the data or was publicly available.</p>
+  <div style="float:none; height:10px;"></div>
+  <p>Website created by Levi Cerra</p>
+
+  <div style="float:none; height:30px;"></div>
+
+
+
+
+  <hr>
+  <h2>Main Page</h2>
+  <p>Landing page for the website.</p>
+  <div style="float:none; height:10px;"></div>
+
+  <h3>Power Plot Tool</h3>
+  <p>Used to create custom plots of power for any currently operating US plant.</p>
+  <p>Will route you to a new webpage to see the plot as well as a table of the requested data. It's there to copy and paste for other applications if you desire.</p>
+  <div style="float:none; height:10px;"></div>
+
+  <h3>US Plant Table</h3>
+  <p>Contains all currently operating US plants with several pieces of info:</p>
+  <div>
+    <ul>
+      <li>Plant Name  (Doubles as link to specific plant info page)</li>
+      <li>Power  (Today's power from NRC)</li>
+      <li>Stability  (Tells you how today's power compares to the last five days averaged)</li>
+      <li>Design  (PWR, BWR, etc.)</li>
+      <li>Design Company  (Westinghouse, General Electric, Combustion Engineering, B&W)</li>
+      <li>NRC Region  (<a href="https://www.nrc.gov/info-finder/region-state/index.html">NRC Regions</a>)</li>
+    </ul>
+  </div>
+  <p>Table can be filtered down using the proided field. This will return all rows that contain your input substring.</p>
+  <div style="float:none; height:10px;"></div>
+
+  <h3>Map of US Plants</h3>
+  <p>Map with dots showing the locations of all currently operating nuclear power plants in the US.</p>
+  <div style="float:none; height:30px;"></div>
+
+
+
+
+  <hr>
+  <h2>Full Database Page</h2>
+  <p>Contains information on all currently operating US plants as well as those that have been decommissioned.</p>
+  <div style="float:none; height:10px;"></div>
+
+  <h3>Extended US Plant Table</h3>
+  <p>Contains more inforamtion for each plant than the table on the main page. All info in table is publicly available and can be filtered down using the provided field.</p>
+  <div style="float:none; height:30px;"></div>
+
+
+
+
+  <hr>
+  <h2>Specific Plant Link Pages</h2>
+  <p>Page for specific information on this plant.</p>
+  <div style="float:none; height:10px;"></div>
+
+  <h3>Today's power info</h3>
+  <p>Power info that was available on the main page.</p>
+  <div style="float:none; height:10px;"></div>
+
+  <h3>Capacity factor over the last three years</h3>
+  <p>The power data over the last three years averaged.</p>
+  <div style="float:none; height:10px;"></div>
+
+  <h3>Outage Estimates</h3>
+  <p>Finds the last 10 consecutive days that the plant was at 0% power. Eighteen or twenty four months (depending on the plant, may not be entirely accurate) are added to this date to estimate the next outage.</p>
+  <div style="float:none; height:10px;"></div>
+
+  <h3>Full Database Entry</h3>
+  <p>The row from the full database page.</p>
+  <div style="float:none; height:10px;"></div>
+
+  <h3>Map Indicating Plant's Location</h3>
+  <p>Map of US with a mark showing where the plant is located.</p>
+  <div style="float:none; height:10px;"></div>
+
+  <h3>Quick Glance Power Plots</h3>
+  <p>Three plots that show the last two months, one year, and two years of power data for the chosen plant.</p>
+  <div style="float:none; height:10px;"></div>
+
+
+
+</body>
+</html>
+
