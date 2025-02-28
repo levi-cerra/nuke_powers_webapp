@@ -31,9 +31,11 @@
   <div style="float:none; height:10px;"></div>
 
   <h3>Raw Data</h3>
-  <p>You can highlight the data and copy the values to an Excel spreadsheet or Google Doc for personal use</p>
+  <p>You can click the button below to copy the values. These values can then be pasted into a spreadsheet for personal use.</p>
+  <input type="button" value="Copy Data" onClick="copytable('data')">
 
-  <table>
+
+  <table id="data">
     <tr>
       <th>Date</th>
       <th>Power</th>
@@ -49,6 +51,17 @@
   </table>
 
   <div style="float:none; height:30px;"></div>
+
+
+  <script>
+      function copytable(el) {
+        var urlField = document.getElementById(el)
+        var range = document.createRange()
+        range.selectNode(urlField)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+      }
+  </script>
 
 
 </body>

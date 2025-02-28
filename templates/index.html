@@ -18,16 +18,20 @@
   <h1>US Nuclear Plant Database</h1>
 
   <a href="https://www.nukepowers.com/info">
-    <button>Info Page</button>
+    <button>Information Page</button>
   </a>
 
   <p>Most recent NRC data from: <strong>{{ todays_date }}</strong> (NRC does not update power data on weekends or holidays)</p>
 
-  <p>With today's power percentages, nuclear power is currently producing <strong>~{{ sum_of_power_produced }} Gigawatts</strong> of energy for the US. This conservatively equates to the power demand of <strong>~{{ homes_powered }} million homes</strong>!</p>
+  <p>With today's power percentages, nuclear power is currently producing <strong>~{{ sum_of_power_produced }} Gigawatts</strong> of power for the US. This conservatively equates to the power demand of <strong>~{{ homes_powered }} million homes</strong>!</p>
 
   <div style="float:none; height:5px;"></div>
 
-  <p>Below is a plotting tool and tables with information on all currently operating US nuclear plants. Click on any plant to see more specific information, its power status, and several power history plots.</p>
+  <p>Below is a plotting tool and tables with information on all currently operating US nuclear plants. Click on any plant in the table to see more specific information, its power status, and several power history plots.</p>
+
+  {% if US_map_url %}
+        <img src={{ US_map_url }} alt="Something went wrong, chart cannot be displayed">
+  {% endif %}
 
   <div style="float:none; height:5px;"></div>
 
@@ -114,10 +118,6 @@
     {% endfor %}
     </tbody>
   </table>
-
-  {% if US_map_url %}
-        <img src={{ US_map_url }} alt="Something went wrong, chart cannot be displayed">
-  {% endif %}
 
   <div style="float:none; height:20px;"></div>
 
