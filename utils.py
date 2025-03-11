@@ -124,6 +124,28 @@ def get_reverse_plant_hashmap():
 
 
 # Function used to create power plots in the application
+def website_plots(x_axis, y_axis, title, scram_list="None"):
+    plt.plot( x_axis, y_axis, '-' )
+    if scram_list != "None":
+        for x in scram_list:
+            plt.axvline(x=x, color='r', linestyle='--')
+    plt.title(title)
+    plt.gcf().autofmt_xdate(rotation=25)
+    plt.grid()
+    plt.xlabel("Dates")
+    plt.ylabel("Power (%)")
+    plt.ylim(0, 110)
+    plt.xlim(x_axis[0], x_axis[len(x_axis)-1])
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    figdata_png = base64.b64encode(figfile.getvalue())
+    result = str(figdata_png)[2:-1]
+    plt.clf()
+    return result
+
+"""
+# Function used to create power plots in the application
 def website_plots(x_axis, y_axis, title):
     plt.plot( x_axis, y_axis, '-' )
     plt.title(title)
@@ -140,5 +162,4 @@ def website_plots(x_axis, y_axis, title):
     result = str(figdata_png)[2:-1]
     plt.clf()
     return result
-
-
+"""

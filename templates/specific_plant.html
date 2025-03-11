@@ -93,7 +93,14 @@
     <div style="float:none; height:10px;"></div>
 
     <h2>Plots</h2>
-    <p>If custom plots are desired, those can be created on the main page.</p>
+    <p>If custom plots are desired, those can be created on the main page. Click button below to get plot of last two years with raw data and more info.</p>
+    <form id="myForm" action="/get_plot" method='POST'>
+    <input type="hidden" id="plant_name_plot" name="plant_name_plot" value="{{ plant_name }}"/>
+    <input type="hidden" id="start_date_plot" name="start_date_plot" value="{{ beginning_date }}"/>
+    <input type="hidden" id="end_date_plot" name="end_date_plot" value="{{ last_date }}"/>
+    <input type="submit" value="Two Year Plot + Data"/>
+    </form>
+
     {% if plot_1 %}
         <img src="data:image/png;base64,{{ plot_1 }}" alt="Something went wrong, chart cannot be displayed">
     {% endif %}

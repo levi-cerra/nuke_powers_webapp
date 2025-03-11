@@ -98,14 +98,40 @@ def get_plot():
         )
         mycursor = conn.cursor()
         mycursor.execute(temp_string)
-        conn.commit
         y_values_from_database = mycursor.fetchall()
+        conn.commit
+
+        request_string = "SELECT DateTime, " + simp_plant_name + " FROM down_reason;"
+        mycursor = conn.cursor()
+        mycursor.execute(request_string)
+        reason_data_results = mycursor.fetchall()
+        conn.commit()
+
+        request_string = "SELECT DateTime, " + simp_plant_name + " FROM down_date;"
+        mycursor = conn.cursor()
+        mycursor.execute(request_string)
+        down_date_data_results = mycursor.fetchall()
+        conn.commit()
+
+        request_string = "SELECT DateTime, " + simp_plant_name + " FROM scram_data;"
+        mycursor = conn.cursor()
+        mycursor.execute(request_string)
+        scram_data_results = mycursor.fetchall()
+        conn.commit()
+
+        r = len(reason_data_results)
+        c = len(reason_data_results[0])
         datelist = []
         power_list = []
+        reason_list = []
+        down_date_list = []
+        scram_list = []
+        scram_x = []
+        scram_y = []
         flag = 0
-        for rows in y_values_from_database:
-            for i, value in enumerate(rows):
-                if i == 0:
+        for i, rows in enumerate(y_values_from_database):
+            for j, value in enumerate(rows):
+                if j == 0:
                     current_date = datetime.strptime(value, '%m/%d/%Y')
                     if end_date_plot >= current_date >= start_date_plot:
                         datelist.append(current_date)
@@ -113,22 +139,42 @@ def get_plot():
                 else:
                     if flag == 1:
                         power_list.append(int(value))
+                        if i < r:
+                            if len(reason_data_results[i][j]) == 0:
+                                reason_list.append(' ')
+                            else:
+                                reason_list.append(reason_data_results[i][j])
+                            if len(down_date_data_results[i][j]) == 0:
+                                down_date_list.append(' ')
+                            else:
+                                down_date_list.append(down_date_data_results[i][j])
+                            if scram_data_results[i][j] > 0:
+                                scram_list.append(scram_data_results[i][j])
+                                scram_x.append(current_date)
+                            else:
+                                scram_list.append(' ')
+                        else:
+                            reason_list.append('No data available for this day')
+                            down_date_list.append('')
+                            scram_list.append('')
                         flag = 0
 
         x_axis = datelist
         y_axis = power_list
         title = plant_name + " Power Plot"
+        title_scram = plant_name + " Power Plot with Scrams"
         plot_png = website_plots(x_axis, y_axis, title)
+        scram_plot_png = website_plots(x_axis, y_axis, title_scram, scram_x)
 
         start_date = start_date_plot.strftime("%m/%d/%Y")
         end_date = end_date_plot.strftime("%m/%d/%Y")
 
         data = []
         for i, row in enumerate(x_axis):
-            temp = (row, y_axis[i])
+            temp = (row, y_axis[i], reason_list[i], down_date_list[i], scram_list[i])
             data.append(temp)
 
-        return render_template('get_plot.html', plant_name = plant_name, start_date = start_date, end_date = end_date, data = data, plot_png = plot_png)
+        return render_template('get_plot.html', plant_name = plant_name, start_date = start_date, end_date = end_date, data = data, plot_png = plot_png, scram_plot_png = scram_plot_png)
     else:
         return render_template('get_plot.html')
 
@@ -226,8 +272,14 @@ def specific_plant():
         plant_map_file = "plant_" + str(plant_number) + "_map.png"
         map_url = "/static/maps/" + plant_map_file
 
+        #Pass Dates of Data
+        beginning_date = x_axis[0]
+        beginning_date = beginning_date.strftime('%m/%d/%Y')
+        last_date = x_axis[(len(x_axis) - 1)]
+        last_date = last_date.strftime('%m/%d/%Y')
 
-        return render_template('specific_plant.html', plant_name = plant_name, power = power, stability = stability, table_results = table_results, perc_capacity = perc_capacity, outage_date = outage_date, next_outage_date = next_outage_date, plot_1 = plot_1, plot_2 = plot_2, plot_3 = plot_3, map_url = map_url)
+
+        return render_template('specific_plant.html', plant_name = plant_name, beginning_date = beginning_date, last_date = last_date, power = power, stability = stability, table_results = table_results, perc_capacity = perc_capacity, outage_date = outage_date, next_outage_date = next_outage_date, plot_1 = plot_1, plot_2 = plot_2, plot_3 = plot_3, map_url = map_url)
     else:
         return render_template('specific_plant.html')
 

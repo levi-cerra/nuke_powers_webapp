@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,23 +30,39 @@
     <img src="data:image/png;base64,{{ plot_png }}" alt="Something went wrong, chart cannot be displayed">
   {% endif %}
 
+  <div style="float:none; height:5px;"></div>
+
+  {% if scram_plot_png %}
+    <img src="data:image/png;base64,{{ scram_plot_png }}" alt="Something went wrong, chart cannot be displayed">
+  {% endif %}
+
   <div style="float:none; height:10px;"></div>
 
   <h3>Raw Data</h3>
   <p>You can click the button below to copy the values. These values can then be pasted into a spreadsheet for personal use.</p>
-  <input type="button" value="Copy Data" onClick="copytable('data')">
+  <input type="button" value="Copy Data" onClick="copytable('data_table')">
 
 
-  <table id="data">
+  <p>Search the table for any field here:
+        <input id="gfg" type="text" placeholder="Search here">
+  </p>
+
+  <table id="data_table">
     <tr>
       <th>Date</th>
       <th>Power</th>
+      <th>Reason</th>
+      <th>Date of Outage</th>
+      <th>Scrams</th>
     </tr>
     <tbody id="data">
     {% for row in data %}
     <tr>
       <td>{{ row[0] }}</td>
       <td>{{ row[1] }}</td>
+      <td>{{ row[2] }}</td>
+      <td>{{ row[3] }}</td>
+      <td>{{ row[4] }}</td>
     </tr>
     {% endfor %}
     </tbody>
@@ -63,6 +81,16 @@
       }
   </script>
 
+  <script>
+        $(document).ready(function () {
+            $("#gfg").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#data tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+  </script>
 
 </body>
 </html>
