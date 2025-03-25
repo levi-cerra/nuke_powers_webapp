@@ -20,7 +20,7 @@
 
   <div style="float:none; height:20px;"></div>
 
-  <p>Requested Plot Details</p>
+  <p>Requested Plot Details:</p>
   <p>Plant: <strong>{{ plant_name }}</strong></p>
   <p>Start Date: <strong>{{ start_date }}</strong></p>
   <p>End Date: <strong>{{ end_date }}</strong></p>
@@ -35,6 +35,9 @@
   {% if scram_plot_png %}
     <img src="data:image/png;base64,{{ scram_plot_png }}" alt="Something went wrong, chart cannot be displayed">
   {% endif %}
+  <p>Second Plot Notes:</p>
+  <p>1. Red dashed lines indicate scrams</p>
+  <p>2. Black dashed line indicates that scram data and additional info are not available from NRC after that date yet</p>
 
   <div style="float:none; height:10px;"></div>
 
@@ -51,18 +54,31 @@
     <tr>
       <th>Date</th>
       <th>Power</th>
-      <th>Reason</th>
-      <th>Date of Outage</th>
+      <th>Reason or Comment</th>
+      <th>Down Date</th>
       <th>Scrams</th>
     </tr>
     <tbody id="data">
     {% for row in data %}
     <tr>
       <td>{{ row[0] }}</td>
+
       <td>{{ row[1] }}</td>
+
+      {% if row[5] == 1 %}
+      <td bgcolor="#D3D3D3">{{ row[2] }}</td>
+      {% else %}
       <td>{{ row[2] }}</td>
+      {% endif %}
+
       <td>{{ row[3] }}</td>
+
+      {% if row[6] == 1 %}
+      <td bgcolor="#FFCCCB">{{ row[4] }}</td>
+      {% else %}
       <td>{{ row[4] }}</td>
+      {% endif %}
+
     </tr>
     {% endfor %}
     </tbody>

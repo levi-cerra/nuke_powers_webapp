@@ -124,11 +124,13 @@ def get_reverse_plant_hashmap():
 
 
 # Function used to create power plots in the application
-def website_plots(x_axis, y_axis, title, scram_list="None"):
+def website_plots(x_axis, y_axis, title, scram_list="None", last_data_list="None"):
     plt.plot( x_axis, y_axis, '-' )
     if scram_list != "None":
         for x in scram_list:
             plt.axvline(x=x, color='r', linestyle='--')
+        for end_date in last_data_list:
+            plt.axvline(x=end_date, color='k', linestyle='--')
     plt.title(title)
     plt.gcf().autofmt_xdate(rotation=25)
     plt.grid()

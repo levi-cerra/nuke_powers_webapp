@@ -55,10 +55,10 @@ try:
                 percents.append(value)
                 power_produced.append((float(value)/100) * float(rated_power_data[i][0]))
 
-    sum_of_power_produced = np.round(np.sum(power_produced) / 1000, 2) # puts it into terawatts and leaves 2 decimal places
+    sum_of_power_produced = np.round(np.sum(power_produced) / 1000, 2) # puts it into gigawatts and leaves 2 decimal places
     homes_powered = np.round(sum_of_power_produced * 1000 * 500 / 1000000, 0)
 
-    # US Picture with plants marked
+    # Picture of US map with plants marked
     US_map_url = '/static/all_plants.png'
 
 except mysql.connector.Error as e:
@@ -66,17 +66,19 @@ except mysql.connector.Error as e:
     message = 'NOT CONNECTED'
     todays_date = 'Error'
 
-
+# Renders Main Page
 @app.route('/')
 def index():
     return render_template('index.html', results1 = results1, todays_date = todays_date, first_available_date = first_available_date, sum_of_power_produced = sum_of_power_produced, homes_powered = homes_powered, US_map_url = US_map_url)
 
 
+# Renders website information page
 @app.route('/info')
 def info():
     return render_template('info.html')
 
 
+# Renders get plot with user input of desired plant and date range
 @app.route('/get_plot', methods = ['GET', 'POST'])
 def get_plot():
     if request.method == "POST":
@@ -86,9 +88,31 @@ def get_plot():
         plant_name_plot = plant_name_plot.upper()
         start_date_plot = request.form['start_date_plot']
         end_date_plot = request.form['end_date_plot']
+        if len(start_date_plot) < 8:
+            if start_date_plot == 'start':
+                start_date_plot = '01/01/1999'
+            else:
+                start_date_plot = '01/01/' + start_date_plot
+        if len(end_date_plot) < 8:
+            if end_date_plot == 'end':
+                conn = mysql.connector.connect(
+                host = secrets.get('HOST') ,
+                user = secrets.get('DATABASE_USER') ,
+                password = secrets.get('DATABASE_PASSWORD') ,
+                database = secrets.get('DATABASE_NAME')
+                )
+                temp_string = 'SELECT DateTime FROM historian_data ORDER BY ID DESC LIMIT 1;'
+                mycursor = conn.cursor()
+                mycursor.execute(temp_string)
+                last_date_of_table = mycursor.fetchall()
+                conn.commit
+                end_date_plot = last_date_of_table[0][0]
+            else:
+                end_date_plot = '01/01/' + end_date_plot
         start_date_plot = datetime.strptime(start_date_plot, '%m/%d/%Y')
         end_date_plot = datetime.strptime(end_date_plot, '%m/%d/%Y')
         simp_plant_name = "plant_" + str(plant_hashmap[plant_name_plot])
+
         temp_string = "SELECT DateTime, " + simp_plant_name + " FROM historian_data;"
         conn = mysql.connector.connect(
         host = secrets.get('HOST') ,
@@ -126,9 +150,13 @@ def get_plot():
         reason_list = []
         down_date_list = []
         scram_list = []
+        refueling_outage_bools = []
+        scram_bools = []
         scram_x = []
         scram_y = []
+        end_of_data_x = []
         flag = 0
+        last_data_flag = 0
         for i, rows in enumerate(y_values_from_database):
             for j, value in enumerate(rows):
                 if j == 0:
@@ -142,21 +170,33 @@ def get_plot():
                         if i < r:
                             if len(reason_data_results[i][j]) == 0:
                                 reason_list.append(' ')
+                                refueling_outage_bools.append(0)
                             else:
                                 reason_list.append(reason_data_results[i][j])
+                                if "REFUEL" in reason_data_results[i][j].upper() and int(value) == 0: #and "COAST" not in reason_data_results[i][j].upper():
+                                    refueling_outage_bools.append(1)
+                                else:
+                                    refueling_outage_bools.append(0)
                             if len(down_date_data_results[i][j]) == 0:
                                 down_date_list.append(' ')
                             else:
                                 down_date_list.append(down_date_data_results[i][j])
                             if scram_data_results[i][j] > 0:
                                 scram_list.append(scram_data_results[i][j])
+                                scram_bools.append(1)
                                 scram_x.append(current_date)
                             else:
                                 scram_list.append(' ')
+                                scram_bools.append(0)
                         else:
-                            reason_list.append('No data available for this day')
+                            reason_list.append('No extra data available for this day')
+                            if last_data_flag == 0:
+                                end_of_data_x.append(current_date)
+                            last_data_flag = 1
                             down_date_list.append('')
                             scram_list.append('')
+                            refueling_outage_bools.append(0)
+                            scram_bools.append(0)
                         flag = 0
 
         x_axis = datelist
@@ -164,14 +204,14 @@ def get_plot():
         title = plant_name + " Power Plot"
         title_scram = plant_name + " Power Plot with Scrams"
         plot_png = website_plots(x_axis, y_axis, title)
-        scram_plot_png = website_plots(x_axis, y_axis, title_scram, scram_x)
+        scram_plot_png = website_plots(x_axis, y_axis, title_scram, scram_x, end_of_data_x)
 
         start_date = start_date_plot.strftime("%m/%d/%Y")
         end_date = end_date_plot.strftime("%m/%d/%Y")
 
         data = []
         for i, row in enumerate(x_axis):
-            temp = (row, y_axis[i], reason_list[i], down_date_list[i], scram_list[i])
+            temp = (row, y_axis[i], reason_list[i], down_date_list[i], scram_list[i], refueling_outage_bools[i], scram_bools[i])
             data.append(temp)
 
         return render_template('get_plot.html', plant_name = plant_name, start_date = start_date, end_date = end_date, data = data, plot_png = plot_png, scram_plot_png = scram_plot_png)
@@ -179,6 +219,7 @@ def get_plot():
         return render_template('get_plot.html')
 
 
+# Renders full plant database
 @app.route('/plant_database')
 def plant_database():
     conn = mysql.connector.connect(
@@ -195,6 +236,7 @@ def plant_database():
     return render_template('full_database_list.html', table_results = table_results)
 
 
+# Renders page with specific plant information for each plant
 @app.route('/specific_plant', methods = ['GET'])
 def specific_plant():
     if request.method == "GET":
